@@ -2,9 +2,6 @@ import { Initializer, Action, api, route, config, log, cache } from "actionhero"
 import * as nonce from "nonce";
 
 abstract class AuthenticationAction extends Action {
-  /**
-   * does this action require the user to be logged in?
-   */
   skipAuthentication: boolean;
 }
 
@@ -18,7 +15,7 @@ export class Auth extends AuthenticationAction {
       shop: "shop.myshopify.com"
     };
     this.skipAuthentication = true;
-    this.params = {
+    this.inputs = {
       hmac: { required : true },
       shop: { required : true },
       code: { required : true },
@@ -62,7 +59,7 @@ export class AuthCallback extends AuthenticationAction {
       shop: "shop.myshopify.com"
     };
     this.skipAuthentication = true;
-    this.params = {
+    this.inputs = {
       hmac: { required : true },
       shop: { required : true },
       code: { required : true },

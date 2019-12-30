@@ -4,13 +4,17 @@
   "description": "Provides shopify authentication to actionhero.js",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && ./node_modules/.bin/tsc --declaration",
+    "postinstall": "npm run build",
     "dev": "ts-node-dev --transpile-only ./node_modules/.bin/actionhero start",
-    "lint": "prettier --check src/*/**.ts __test__/*/**.ts",
-    "prepare": "npm run build",
-    "pretest": "npm run lint && npm run build",
-    "test": "jest"
+    "start": "actionhero start",
+    "actionhero": "actionhero",
+    "test": "jest",
+    "pretest": "npm run build && npm run lint",
+    "build": "tsc --declaration",
+    "lint": "prettier --check src/*/** __test__/*/**",
+    "pretty": "prettier --write src/*/** __test__/*/**"
   },
+  "bundleDependencies": false,
   "author": "Ryan Gallagher",
   "license": "ISC",
   "dependencies": {
@@ -39,12 +43,6 @@
     "node": ">=8.0.0"
   },
   "peerDependencies": {
-    "actionhero": ">=21.0.0",
-    "cookie": "^0.4.0",
-    "crypto": "^1.0.1",
-    "dotenv": "^8.2.0",
-    "node-fetch": "^2.6.0",
-    "nonce": "^1.0.4",
-    "querystring": "^0.2.0"
+    "actionhero": ">=21.0.0"
   }
 }

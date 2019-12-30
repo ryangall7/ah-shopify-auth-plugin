@@ -1,4 +1,4 @@
-import { Initializer, api, action, route, config, log } from "actionhero";
+import { Initializer, cache, api, action, route, config, log } from "actionhero";
 import * as nonce from "nonce";
 import * as crypto from "crypto";
 import * as querystring from "querystring";
@@ -15,8 +15,17 @@ export class ShopifyAuthInitializer extends Initializer {
 
   async initialize () {
 
+    if(!config.shopifyAuth){
+      log("Please add `shopifyAuth` config to use `ah-shopify-auth-plugin`", "error")
+      return;
+    }
+
     const { apiKey, apiSecret, scopes, forwardingAddress } = config.shopifyAuth;
-    const redis = api.redis.clients.client
+
+    if(!apiKey || !apiSecret){
+      log("Please add `apiKey` and `apiSecret` in .env or config to use `ah-shopify-auth-plugin`", "error")
+      return;
+    }
 
     api.shopifyAuth = {
       prefix: 'shopifySession:',
@@ -30,7 +39,6 @@ export class ShopifyAuthInitializer extends Initializer {
 
           session.shopifySession = await api.shopifyAuth.loadShopifySession(connection)
 
-          console.log(connection);
           // is this a authentication action?
           if(!actionTemplate.skipAuthentication && !session.shopifySession){
 
@@ -61,22 +69,21 @@ export class ShopifyAuthInitializer extends Initializer {
     api.shopifyAuth.loadShopifySession = async (connection) => {
       const key = api.shopifyAuth.prefix + connection.fingerprint
 
-      const data = await redis.get(key)
+      const data = await cache.load(key)
       if (!data) { return false }
-      return JSON.parse(data)
+      return data;
     },
 
     api.shopifyAuth.createShopifySession = async (connection, auth) => {
       const key = api.shopifyAuth.prefix + connection.fingerprint
 
-      await redis.set(key, JSON.stringify(auth))
-      await redis.expire(key, api.shopifyAuth.ttl)
+      await cache.save(key, JSON.stringify(auth), api.shopifyAuth.ttl)
       return auth;
     },
 
     api.shopifyAuth.destroyShopifySession = async (connection) => {
       const key = api.shopifyAuth.prefix + connection.fingerprint
-      await redis.del(key)
+      await cache.destroy(key)
     },
 
     api.shopifyAuth.verifyHmac = async (hmac, query) => {
