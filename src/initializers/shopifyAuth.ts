@@ -153,7 +153,6 @@ export class ShopifyAuthInitializer extends Initializer {
 
     route.registerRoute("get", "/auth", "shopify:auth");
     route.registerRoute("get", "/auth/callback", "shopify:authCallback");
-    route.registerRoute("all", "/", "shopify:authCheck", null, true);
 
     action.addMiddleware(api.shopifyAuth.middleware);
 
