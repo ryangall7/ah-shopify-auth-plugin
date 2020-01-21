@@ -68,10 +68,13 @@ export class ShopifyAuthInitializer extends Initializer {
 
     api.shopifyAuth.loadShopifySession = async (connection) => {
       const key = api.shopifyAuth.prefix + connection.fingerprint
-
-      const data = await cache.load(key)
-      if (!data) { return false }
-      return data;
+      try{
+        const data = await cache.load(key)
+        if (!data) { return false }
+        return data;
+      }catch(e){
+        return false;
+      }
     },
 
     api.shopifyAuth.createShopifySession = async (connection, auth) => {

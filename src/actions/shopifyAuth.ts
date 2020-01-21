@@ -18,8 +18,7 @@ export class Auth extends AuthenticationAction {
     this.inputs = {
       hmac: { required : true },
       shop: { required : true },
-      code: { required : true },
-      state: { required : true }
+      timestamp: { required : false }
     }
   }
 
