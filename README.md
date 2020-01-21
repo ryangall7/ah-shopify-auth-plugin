@@ -42,7 +42,7 @@ async function BOOT() {
 exports.BOOT = BOOT;
 ```
 
-3. Add a `shopifyAuth.ts` to your `config` directory with the following:
+5. Add a `shopifyAuth.ts` to your `config` directory with the following:
 
 ```ts
 const path = require("path");
@@ -60,5 +60,4 @@ export const DEFAULT = {
 };
 ```
 
-
-4. In most cases change your default route in `config/servers/web.ts` to be "api" rather than "file" (this plugin only authenticates api calls)
+6. In most cases change your default route in `config/servers/web.ts` to be "api" rather than "file" (this plugin only authenticates api calls)
