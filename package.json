@@ -1,6 +1,6 @@
 {
   "name": "ah-shopify-auth-plugin",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Provides shopify authentication to actionhero.js",
   "main": "index.js",
   "scripts": {
