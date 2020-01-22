@@ -141,7 +141,7 @@ export class AuthCallback extends AuthenticationAction {
       const accessTokenResponse = await api.shopifyAuth.getAccessToken(shop, code);
       if(accessTokenResponse){
         const saveResponse = await api.shopifyAuth.createShopifySession(connection, {...accessTokenResponse, shop});
-        connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop]);
+        connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop + "; Path=/; Secure"]);
         console.log(saveResponse);
       }else{
         connection.rawConnection.responseHttpCode = 500;
