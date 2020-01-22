@@ -43,12 +43,11 @@ export class ShopifyAuthInitializer extends Initializer {
           var skip = false;
           let {path} = connection.rawConnection.req.uri;
           ignoredDirectories.map(( dirrectory ) => {
-            console.log(path.indexOf(dirrectory));
             if(path.indexOf(dirrectory) == 1){
               skip = true;
             }
           });
-          
+
           if(skip) return;
 
           // is this a authentication action?
@@ -168,7 +167,7 @@ export class ShopifyAuthInitializer extends Initializer {
     }
 
     api.shopifyAuth.topLevelRedirectScript = (origin, redirectTo) => {
-      console.log("toplevel redirect");
+      log(`Shopify auth toplevel redirect to ${redirectTo}`);
 
       return `
         <script type="text/javascript">
