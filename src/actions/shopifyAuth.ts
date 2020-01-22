@@ -75,7 +75,6 @@ export class AuthInline extends AuthenticationAction {
     if (shop) {
 
       const cookies = api.utils.parseCookies(connection.rawConnection.req)
-      console.log(cookies);
       // console.log(connection.rawConnection.req);
 
       const state = nonce()();
@@ -120,8 +119,6 @@ export class AuthCallback extends AuthenticationAction {
   async run({ connection, response }) {
     const { state, hmac, code, shop } = connection.params
     const stateCookie = connection.rawConnection.cookies.state;
-
-    console.log(stateCookie, state);
 
     if (state !== stateCookie) {
       connection.rawConnection.responseHttpCode = 400;

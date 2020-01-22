@@ -50,8 +50,16 @@ export class ShopifyAuthInitializer extends Initializer {
 
           if(skip) return;
 
+          if(session.shopifySession){
+            console.log("hasSession");
+            console.log(session.shopifySession);
+            const cookies = api.utils.parseCookies(connection.rawConnection.req);
+            console.log(cookies);
+            return;
+          }
+
           // is this a authentication action?
-          if(!actionTemplate.skipAuthentication && !session.shopifySession){
+          if(!actionTemplate.skipAuthentication){
 
             const { hmac, shop, timestamp } = params;
 
