@@ -20,7 +20,7 @@ export class ShopifyAuthInitializer extends Initializer {
       return;
     }
 
-    const { apiKey, apiSecret, scopes, forwardingAddress } = config.shopifyAuth;
+    const { ignoredDirectories, apiKey, apiSecret, scopes, forwardingAddress } = config.shopifyAuth;
 
     if(!apiKey || !apiSecret){
       log("Please add `apiKey` and `apiSecret` in .env or config to use `ah-shopify-auth-plugin`", "error")
@@ -39,7 +39,15 @@ export class ShopifyAuthInitializer extends Initializer {
 
           session.shopifySession = await api.shopifyAuth.loadShopifySession(connection)
 
-          console.log(session.shopifySession);
+          //check for ignored directories
+          var skip = false;
+          let {path} = connection.rawConnection.req.uri;
+          ignoredDirectories.map(( dirrectory ) => {
+            console.log(path.indexOf(dirrectory));
+            if(path.indexOf(dirrectory) == 1){
+              skip = true;
+            }
+          });
           // is this a authentication action?
           if(!actionTemplate.skipAuthentication && !session.shopifySession){
 
@@ -50,20 +58,24 @@ export class ShopifyAuthInitializer extends Initializer {
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
             }else{
-              console.log("Request missing shop")
-              // TODO: deal with invalid requests
+              connection.rawConnection.res.end("Request missing shop");
+              connection.rawConnection.responseHttpCode = 403;
+              connection.destroy();
             }
           }else{
-            const { hmac } = connection.params
-            const { query } = connection.rawConnection.parsedURL;
+            if(!skip){
+              const { hmac } = connection.params
+              const { query } = connection.rawConnection.parsedURL;
 
-            let validHmac = false;
-            if(hmac && query){
-              validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
-            }
-            if(!hmac){
-              console.log("Request missing hmac")
-              // TODO: deal with unauthenicated requests
+              let validHmac = false;
+              if(hmac && query){
+                validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
+              }
+              if(!hmac){
+                connection.rawConnection.res.end("Request missing hmac");
+                connection.rawConnection.responseHttpCode = 403;
+                connection.destroy();
+              }
             }
           }
        }

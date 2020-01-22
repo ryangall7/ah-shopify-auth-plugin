@@ -54,7 +54,8 @@ export const DEFAULT = {
         apiKey: process.env.SHOPIFY_API_KEY,
         apiSecret: process.env.SHOPIFY_API_SECRET,
         scopes: 'read_products',
-        forwardingAddress: "https://d2935a55.ngrok.io"
+        forwardingAddress: "https://d2935a55.ngrok.io", //using ngrok to test
+        ignoredDirectories: ["static"] //array of ignored directories (top level only)
     };
   }
 };

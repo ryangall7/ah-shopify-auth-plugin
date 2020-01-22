@@ -3,6 +3,7 @@ export const DEFAULT = {
     return {
       get: [
         { path: '/', action: 'shopify:authCheck' },
+        { path: '/static/test', action: 'shopify:authCheck' },
       ]
     }
   }
