@@ -48,6 +48,9 @@ export class ShopifyAuthInitializer extends Initializer {
               skip = true;
             }
           });
+          
+          if(skip) return;
+
           // is this a authentication action?
           if(!actionTemplate.skipAuthentication && !session.shopifySession){
 
@@ -63,19 +66,17 @@ export class ShopifyAuthInitializer extends Initializer {
               connection.destroy();
             }
           }else{
-            if(!skip){
-              const { hmac } = connection.params
-              const { query } = connection.rawConnection.parsedURL;
+            const { hmac } = connection.params
+            const { query } = connection.rawConnection.parsedURL;
 
-              let validHmac = false;
-              if(hmac && query){
-                validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
-              }
-              if(!hmac){
-                connection.rawConnection.res.end("Request missing hmac");
-                connection.rawConnection.responseHttpCode = 403;
-                connection.destroy();
-              }
+            let validHmac = false;
+            if(hmac && query){
+              validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
+            }
+            if(!hmac){
+              connection.rawConnection.res.end("Request missing hmac");
+              connection.rawConnection.responseHttpCode = 403;
+              connection.destroy();
             }
           }
        }
