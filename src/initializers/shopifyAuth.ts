@@ -39,6 +39,7 @@ export class ShopifyAuthInitializer extends Initializer {
 
           session.shopifySession = await api.shopifyAuth.loadShopifySession(connection)
 
+          console.log(session.shopifySession);
           // is this a authentication action?
           if(!actionTemplate.skipAuthentication && !session.shopifySession){
 
@@ -49,6 +50,7 @@ export class ShopifyAuthInitializer extends Initializer {
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
             }else{
+              console.log("Request missing shop")
               // TODO: deal with invalid requests
             }
           }else{
@@ -60,6 +62,7 @@ export class ShopifyAuthInitializer extends Initializer {
               validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
             }
             if(!hmac){
+              console.log("Request missing hmac")
               // TODO: deal with unauthenicated requests
             }
           }
@@ -151,7 +154,30 @@ export class ShopifyAuthInitializer extends Initializer {
       }
     }
 
+    api.shopifyAuth.topLevelRedirectScript = (origin, redirectTo) => {
+      console.log("toplevel redirect");
+
+      return `
+        <script type="text/javascript">
+          document.addEventListener('DOMContentLoaded', function() {
+            if (window.top === window.self) {
+              // If the current window is the 'parent', change the URL by setting location.href
+              window.location.href = '${redirectTo}';
+            } else {
+              // If the current window is the 'child', change the parent's URL with postMessage
+              data = JSON.stringify({
+                message: 'Shopify.API.remoteRedirect',
+                data: { location: '${redirectTo}' }
+              });
+              window.parent.postMessage(data, '${origin}');
+            }
+          });
+        </script>
+      `;
+    }
+
     route.registerRoute("get", "/auth", "shopify:auth");
+    route.registerRoute("get", "/auth/inline", "shopify:authInline");
     route.registerRoute("get", "/auth/callback", "shopify:authCallback");
 
     action.addMiddleware(api.shopifyAuth.middleware);
