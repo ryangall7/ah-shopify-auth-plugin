@@ -38,6 +38,7 @@ export class ShopifyAuthInitializer extends Initializer {
         preProcessor: async ({session, actionTemplate, params, connection }) => {
 
           session.shopifySession = await api.shopifyAuth.loadShopifySession(connection)
+          console.log(session.shopifySession);
 
           //check for ignored directories
           var skip = false;
@@ -47,45 +48,33 @@ export class ShopifyAuthInitializer extends Initializer {
               skip = true;
             }
           });
-
           if(skip) return;
 
+          if(actionTemplate.skipAuthentication) return;
+
+          const { hmac, shop, timestamp } = params;
+          //check for session
           if(session.shopifySession){
-            console.log("hasSession");
-            console.log(session.shopifySession);
-            const cookies = api.utils.parseCookies(connection.rawConnection.req);
-            console.log(cookies);
-            return;
-          }
-
-          // is this a authentication action?
-          if(!actionTemplate.skipAuthentication){
-
-            const { hmac, shop, timestamp } = params;
-
-            if (shop) {
+            console.log(shop, session.shopifySession.shop)
+            if(shop && shop != session.shopifySession.shop){
               const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
             }else{
-              connection.rawConnection.res.end("Request missing shop");
-              connection.rawConnection.responseHttpCode = 403;
-              connection.destroy();
-            }
-          }else{
-            const { hmac } = connection.params
-            const { query } = connection.rawConnection.parsedURL;
-
-            let validHmac = false;
-            if(hmac && query){
-              validHmac = await api.shopifyAuth.verifyHmac(hmac, query);
-            }
-            if(!hmac){
-              connection.rawConnection.res.end("Request missing hmac");
-              connection.rawConnection.responseHttpCode = 403;
-              connection.destroy();
+              return;
             }
           }
+
+          if (shop) {
+            const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
+            connection.rawConnection.responseHeaders.push(['Location', installUrl]);
+            connection.rawConnection.responseHttpCode = 302;
+          }else{
+            connection.rawConnection.res.end("Request missing shop");
+            connection.rawConnection.responseHttpCode = 403;
+            connection.destroy();
+          }
+
        }
     }
 
@@ -94,7 +83,8 @@ export class ShopifyAuthInitializer extends Initializer {
       try{
         const data = await cache.load(key)
         if (!data) { return false }
-        return data;
+        const value = JSON.parse(data.value);
+        return value;
       }catch(e){
         return false;
       }

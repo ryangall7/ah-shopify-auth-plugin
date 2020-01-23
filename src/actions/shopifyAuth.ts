@@ -75,7 +75,6 @@ export class AuthInline extends AuthenticationAction {
     if (shop) {
 
       const cookies = api.utils.parseCookies(connection.rawConnection.req)
-      // console.log(connection.rawConnection.req);
 
       const state = nonce()();
       const redirectUri = forwardingAddress + '/auth/callback';
@@ -141,7 +140,6 @@ export class AuthCallback extends AuthenticationAction {
         connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop + "; Path=/; Secure"]);
         connection.rawConnection.responseHeaders.push(['Location', "/?hmac=" + hmac]);
         connection.rawConnection.responseHttpCode = 302;
-        console.log(saveResponse);
       }else{
         connection.rawConnection.responseHttpCode = 500;
         response.error = 'Error getting permanent access token from shopify';
@@ -166,7 +164,6 @@ export class AuthCheck extends Action {
   }
 
   async run({ session, response }) {
-    console.log(session);
     response.randomNumber = Math.random();
   }
 }
