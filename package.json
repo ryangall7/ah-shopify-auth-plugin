@@ -48,5 +48,6 @@
   },
   "peerDependencies": {
     "actionhero": ">=21.0.0"
-  }
+  },
+  "keywords" : ["shopify", "actionhero.js", "actionhero", "oauth", "authentication"]
 }
