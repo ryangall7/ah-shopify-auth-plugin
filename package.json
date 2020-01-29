@@ -1,8 +1,12 @@
 {
   "name": "ah-shopify-auth-plugin",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Provides shopify authentication to actionhero.js",
-  "main": "index.js",
+  "bugs" : { "url": "https://github.com/ryangall7/ah-shopify-auth-plugin/issues"},
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ryangall7/ah-shopify-auth-plugin.git"
+  },
   "scripts": {
     "postinstall": "npm run build",
     "dev": "ts-node-dev --transpile-only ./node_modules/.bin/actionhero start",
