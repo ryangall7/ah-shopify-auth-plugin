@@ -60,7 +60,9 @@ export const DEFAULT = {
           onlyStaticElements: false,
           settings: {
             path: "/",
-            expires: 3600000
+            expires: 3600000,
+            sameSite: "None",
+            secure: true
           }
         },
         // Options to be applied to incoming file uploads.

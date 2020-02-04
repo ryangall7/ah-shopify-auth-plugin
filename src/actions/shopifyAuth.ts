@@ -22,8 +22,12 @@ export class Auth extends AuthenticationAction {
     }
   }
 
-  async run({ session, actionTemplate, connection, toRender }) {
+  async run(data) {
+    const { session, actionTemplate, connection, toRender } = data;
     const { apiKey, scopes, forwardingAddress } = config.shopifyAuth;
+
+    console.log("hello");
+    console.log(data);
 
     const { hmac, shop, timestamp } = connection.params;
 
@@ -137,7 +141,7 @@ export class AuthCallback extends AuthenticationAction {
       const accessTokenResponse = await api.shopifyAuth.getAccessToken(shop, code);
       if(accessTokenResponse){
         const saveResponse = await api.shopifyAuth.createShopifySession(connection, {...accessTokenResponse, shop});
-        connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop + "; Path=/; Secure"]);
+        connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop + "; Path=/; Secure; SameSite=None"]);
         connection.rawConnection.responseHeaders.push(['Location', "/?hmac=" + hmac]);
         connection.rawConnection.responseHttpCode = 302;
       }else{

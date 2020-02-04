@@ -62,3 +62,22 @@ export const DEFAULT = {
 ```
 
 6. In most cases change your default route in `config/servers/web.ts` to be "api" rather than "file" (this plugin only authenticates api calls)
+
+## SameSite cookies
+Shopify and chrome now require cookies to be [SameSite=none](https://help.shopify.com/en/api/guides/samesite-cookies). To do this you need to add these attributes to your sessionID cookie in `config/servers/web.ts`:
+```ts
+...
+// Settings for determining the id of an http(s) request (browser-fingerprint)
+fingerprintOptions: {
+  cookieKey: "sessionID",
+  toSetCookie: true,
+  onlyStaticElements: false,
+  settings: {
+    path: "/",
+    expires: 3600000,
+    sameSite: "None",
+    secure: true
+  }
+},
+...
+```
