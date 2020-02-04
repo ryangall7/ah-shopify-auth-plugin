@@ -37,8 +37,7 @@ export class ShopifyAuthInitializer extends Initializer {
         global: true,
         preProcessor: async ({session, actionTemplate, params, connection }) => {
 
-          session.shopifySession = await api.shopifyAuth.loadShopifySession(connection)
-          console.log(session.shopifySession);
+          session.shopifySession = await api.shopifyAuth.loadShopifySession(connection);
 
           //check for ignored directories
           var skip = false;
