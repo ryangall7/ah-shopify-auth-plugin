@@ -22,12 +22,8 @@ export class Auth extends AuthenticationAction {
     }
   }
 
-  async run(data) {
-    const { session, actionTemplate, connection, toRender } = data;
+  async run({ session, actionTemplate, connection, toRender }) {
     const { apiKey, scopes, forwardingAddress } = config.shopifyAuth;
-
-    console.log("hello");
-    console.log(data);
 
     const { hmac, shop, timestamp } = connection.params;
 
