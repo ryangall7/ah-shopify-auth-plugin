@@ -54,7 +54,6 @@ export class ShopifyAuthInitializer extends Initializer {
           const { hmac, shop, timestamp } = params;
           //check for session
           if(session.shopifySession){
-            console.log(shop, session.shopifySession.shop)
             if(shop && shop != session.shopifySession.shop){
               const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
@@ -185,6 +184,12 @@ export class ShopifyAuthInitializer extends Initializer {
       `;
     }
 
+    api.shopifyAuth.afterAuth = async (data, accessToken) => {
+      // Overwrite this function process the shopify access token after its been recieved
+      log("Shopify Authorization Complete!");
+      return;
+    }
+
     route.registerRoute("get", "/auth", "shopify:auth");
     route.registerRoute("get", "/auth/inline", "shopify:authInline");
     route.registerRoute("get", "/auth/callback", "shopify:authCallback");
@@ -192,14 +197,4 @@ export class ShopifyAuthInitializer extends Initializer {
     action.addMiddleware(api.shopifyAuth.middleware);
 
   }
-
-
-  // async start() {
-  //   console.log(api.routes);
-  // }
-  //
-  // async stop() {
-  //   await api.StuffInit.stopStuff();
-  //   api.log("I stopped", "debug", this.name);
-  // }
 }

@@ -81,3 +81,10 @@ fingerprintOptions: {
 },
 ...
 ```
+
+Processing Auth Token
+=====================
+
+Auth Token and scopes are saved on the session object.
+
+If you need to do something with the Shopify authToken once you
