@@ -85,6 +85,24 @@ fingerprintOptions: {
 Processing Auth Token
 =====================
 
-Auth Token and scopes are saved on the session object.
+Auth Token and scopes are saved on the session object. Like this:
 
-If you need to do something with the Shopify authToken once you
+```
+{
+  shopifySession: {
+    access_token: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    scope: 'read_products',
+    shop: 'some-store.myshopify.com'
+  }
+}
+```
+
+If you need to do something with the Shopify authToken once a user authenticates you can overwrite the function:
+```  
+api.shopifyAuth.getAccessToken = async (data, shopifySession) => {
+    // Overwrite this function process the shopify access token after its been recieved
+    log("Shopify Authorization Complete!");
+    return;
+}
+```
+the `data` object is the same `data` object passed to Actionhero actions, and the `shopifySession` is structured as above.
