@@ -5,7 +5,7 @@ Still early stages, would love any input!
 
 ## Configuration
 
-To configure your Actionhero server to also run Next:
+To configure your Actionhero server to authenicate with shopify oAuth:
 
 1. Add this plugin to your actionhero project `npm install ah-shopify-auth-plugin`. You should also `npm install dotenv` if you havent already. You'll need it to load your shopify credentials without committing them in a config file.
 
