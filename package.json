@@ -2,10 +2,12 @@
   "name": "ah-shopify-auth-plugin",
   "version": "0.0.19",
   "description": "Provides shopify authentication to actionhero.js",
-  "bugs" : { "url": "https://github.com/ryangall7/ah-shopify-auth-plugin/issues"},
+  "bugs": {
+    "url": "https://github.com/ryangall7/ah-shopify-auth-plugin/issues"
+  },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/ryangall7/ah-shopify-auth-plugin.git"
+    "type": "git",
+    "url": "https://github.com/ryangall7/ah-shopify-auth-plugin.git"
   },
   "scripts": {
     "postinstall": "npm run build",
@@ -49,5 +51,11 @@
   "peerDependencies": {
     "actionhero": ">=21.0.0"
   },
-  "keywords" : ["shopify", "actionhero.js", "actionhero", "oauth", "authentication"]
+  "keywords": [
+    "shopify",
+    "actionhero.js",
+    "actionhero",
+    "oauth",
+    "authentication"
+  ]
 }
