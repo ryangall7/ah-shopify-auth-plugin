@@ -139,7 +139,7 @@ export class AuthCallback extends AuthenticationAction {
 
       if(accessTokenResponse){
         const saveResponse = await api.shopifyAuth.createShopifySession(connection, {...accessTokenResponse, shop});
-        const afterAuth = await api.shopifyAuth.afterAuth(data, accessTokenResponse);
+        const afterAuth = await api.shopifyAuth.afterAuth(data, {...accessTokenResponse, shop});
 
         connection.rawConnection.responseHeaders.push(['Set-cookie', "shopOrigin=" + shop + "; Path=/; Secure; SameSite=None"]);
         connection.rawConnection.responseHeaders.push(['Location', "/?hmac=" + hmac]);
