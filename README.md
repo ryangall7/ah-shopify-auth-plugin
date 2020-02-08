@@ -99,7 +99,7 @@ Auth Token and scopes are saved on the session object. Like this:
 
 If you need to do something with the Shopify authToken once a user authenticates you can overwrite the function:
 ```  
-api.shopifyAuth.getAccessToken = async (data, shopifySession) => {
+api.shopifyAuth.afterAuth = async (data, shopifySession) => {
     // Overwrite this function process the shopify access token after its been recieved
     log("Shopify Authorization Complete!");
     return;

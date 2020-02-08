@@ -8,9 +8,9 @@ export class ShopifyAuthInitializer extends Initializer {
   constructor() {
     super();
     this.name = "shopifyAuthInitializer";
-    this.loadPriority = 1000;
-    this.startPriority = 1000;
-    this.stopPriority = 1000;
+    this.loadPriority = 999;
+    this.startPriority = 999;
+    this.stopPriority = 999;
   }
 
   async initialize () {
@@ -28,6 +28,7 @@ export class ShopifyAuthInitializer extends Initializer {
     }
 
     api.shopifyAuth = {
+      ...api.shopifyAuth,
       prefix: 'shopifySession:',
       ttl: 60 * 60 * 24, // 1 day
     };
