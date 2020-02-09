@@ -1,4 +1,4 @@
-Plugin to add shopify authentication to [Actionhero](https://www.actionherojs.com/)
+Plugin to add [Shopify authentication](https://help.shopify.com/en/api/getting-started/authentication/oauth) to [Actionhero](https://www.actionherojs.com/)
 ----------------------------------------------------------------------------------
 
 Still early stages, would love any input!
@@ -7,7 +7,7 @@ Still early stages, would love any input!
 
 To configure your Actionhero server to authenicate with shopify oAuth:
 
-1. Add this plugin to your actionhero project `npm install ah-shopify-auth-plugin`. Also, if you want to store your creditnails in a file rather than your server's ENVIRONMENT, you can `npm install dotenv`. 
+1. Add this plugin to your actionhero project `npm install ah-shopify-auth-plugin`. Also, if you want to store your creditnails in a file rather than your server's ENVIRONMENT, you can `npm install dotenv`.
 2. Include this plugin in your `config/plugins.ts`.
 
 ```ts
