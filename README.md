@@ -7,9 +7,8 @@ Still early stages, would love any input!
 
 To configure your Actionhero server to authenicate with shopify oAuth:
 
-1. Add this plugin to your actionhero project `npm install ah-shopify-auth-plugin`. You should also `npm install dotenv` if you havent already. You'll need it to load your shopify credentials without committing them in a config file.
-
-2. Include it in your `config/plugins.ts`.
+1. Add this plugin to your actionhero project `npm install ah-shopify-auth-plugin`. Also, if you want to store your creditnails in a file rather than your server's ENVIRONMENT, you can `npm install dotenv`. 
+2. Include this plugin in your `config/plugins.ts`.
 
 ```ts
 import { join } from "path";
@@ -25,24 +24,13 @@ export const DEFAULT = {
 };
 ```
 
-3. Add your apps `API_KEY` and `API_SECRET` to a `.env` file
+3. Set the required enviornment variables, either in your ENV or `.env`.  This plugin requites `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET`.
 ```
 SHOPIFY_API_KEY=[YOUR_SHOPIFY_API_KEY]
 SHOPIFY_API_SECRET=[YOUR_SHOPIFY_API_SECRET]
 ```
 
-4. Add `dotenv` to your boot.js:
-```js
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-async function BOOT() {
-    console.log("~~~ running the actionhero project directly ~~~");
-    require('dotenv').config();
-}
-exports.BOOT = BOOT;
-```
-
-5. Add a `shopifyAuth.ts` to your `config` directory with the following:
+4. Add a `shopifyAuth.ts` to your `config` directory with the following:
 
 ```ts
 const path = require("path");
@@ -54,14 +42,14 @@ export const DEFAULT = {
         apiKey: process.env.SHOPIFY_API_KEY,
         apiSecret: process.env.SHOPIFY_API_SECRET,
         scopes: 'read_products',
-        forwardingAddress: "https://d2935a55.ngrok.io", //using ngrok to test
+        forwardingAddress: "https://d2935a55.ngrok.io", //using ngrok to test, normally this would be your application's URL
         ignoredDirectories: ["static"] //array of ignored directories (top level only)
     };
   }
 };
 ```
 
-6. In most cases change your default route in `config/servers/web.ts` to be "api" rather than "file" (this plugin only authenticates api calls)
+5. In most cases change your default route in `config/servers/web.ts` to be "api" rather than "file" (this plugin only authenticates api calls)
 
 ## SameSite cookies
 Shopify and chrome now require cookies to be [SameSite=none](https://help.shopify.com/en/api/guides/samesite-cookies). To do this you need to add these attributes to your sessionID cookie in `config/servers/web.ts`:
