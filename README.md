@@ -1,7 +1,7 @@
 Plugin to add [Shopify authentication](https://help.shopify.com/en/api/getting-started/authentication/oauth) to [Actionhero](https://www.actionherojs.com/)
 ----------------------------------------------------------------------------------
 
-Still early stages, would love any input!
+Still early stages, would love any input! 
 
 ## Configuration
 

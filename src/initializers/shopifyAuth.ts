@@ -64,6 +64,8 @@ export class ShopifyAuthInitializer extends Initializer {
             }
           }
 
+          console.log("no shopify session");
+
           if (shop) {
             const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
             connection.rawConnection.responseHeaders.push(['Location', installUrl]);
@@ -156,7 +158,7 @@ export class ShopifyAuthInitializer extends Initializer {
       });
 
       if(response.status == 200){
-        return await response.json()
+        return await response.json();
       }else{
         log("Error getting permanent access token from shopify")
         return false;
