@@ -59,6 +59,7 @@ export class ShopifyAuthInitializer extends Initializer {
               const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
+              throw Error('Authentication Failed.');
             }else{
               return;
             }
@@ -70,10 +71,11 @@ export class ShopifyAuthInitializer extends Initializer {
             const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
             connection.rawConnection.responseHeaders.push(['Location', installUrl]);
             connection.rawConnection.responseHttpCode = 302;
+            throw Error('Authentication Failed.');
           }else{
             connection.rawConnection.res.end("Request missing shop");
             connection.rawConnection.responseHttpCode = 403;
-            connection.destroy();
+            throw Error('Authentication Failed.');
           }
 
        }
