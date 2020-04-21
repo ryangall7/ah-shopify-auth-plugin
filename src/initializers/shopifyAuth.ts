@@ -78,7 +78,14 @@ export class ShopifyAuthInitializer extends Initializer {
             const { body, rawBody } = connection.rawConnection.params;
             const verified = await api.shopifyAuth.verifyWebhookHmac(xShopifyHmacSha256, rawBody.toString('utf-8'));
 
-            if(verified) return;
+            if(verified){
+              params.xShopifyApiVersion = xShopifyApiVersion;
+              params.xShopifyHmacSha256 = xShopifyHmacSha256;
+              params.xShopifyShopDomain = xShopifyShopDomain;
+              params.xShopifyTest = xShopifyTest;
+              params.xShopifyTopic = xShopifyTopic;
+              return;
+            }
           }
 
           if (shop) {
