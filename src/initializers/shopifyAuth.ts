@@ -167,7 +167,7 @@ export class ShopifyAuthInitializer extends Initializer {
           const providedHmac = Buffer.from(hmac, 'utf-8');
 
           const generatedHash = crypto.createHmac('sha256', apiSecret)
-                .update(query, 'utf8')
+                .update(body, 'utf8')
                 .digest('base64');
 
           console.log(hmac, generatedHash);
