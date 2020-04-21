@@ -65,10 +65,7 @@ export class ShopifyAuthInitializer extends Initializer {
             }
           }
 
-          console.log("no shopify session");
-
           //check webhook
-          console.log(connection.rawConnection.req);
           const {
             'x-shopify-api-version': xShopifyApiVersion,
             'x-shopify-hmac-sha256': xShopifyHmacSha256,
@@ -76,16 +73,13 @@ export class ShopifyAuthInitializer extends Initializer {
             'x-shopify-test': xShopifyTest,
             'x-shopify-topic': xShopifyTopic
           } = connection.rawConnection.req.headers;
-          console.log(xShopifyApiVersion, xShopifyHmacSha256, xShopifyShopDomain, xShopifyTest, xShopifyTopic);
+
           if(xShopifyTopic){
             const { body, rawBody } = connection.rawConnection.params;
-            console.log(rawBody.toString('utf-8'));
-            const verified = await api.shopifyAuth.verifyHmac(xShopifyHmacSha256, JSON.stringify(body));
-            console.log(verified);
+            const verified = await api.shopifyAuth.verifyWebhookHmac(xShopifyHmacSha256, rawBody.toString('utf-8'));
+
             if(verified) return;
           }
-
-          console.log("no webhook")
 
           if (shop) {
             const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
@@ -164,16 +158,13 @@ export class ShopifyAuthInitializer extends Initializer {
 
     api.shopifyAuth.verifyWebhookHmac = async (hmac, body) => {
 
-          const providedHmac = Buffer.from(hmac, 'utf-8');
-
           const generatedHash = crypto.createHmac('sha256', apiSecret)
                 .update(body, 'utf8')
                 .digest('base64');
 
-          console.log(hmac, generatedHash);
           let hashEquals = false;
           try {
-              hashEquals = crypto.timingSafeEqual(Buffer.from(providedHmac), Buffer.from(generatedHash));
+              hashEquals = crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(generatedHash));
           }
           catch (e) {
               hashEquals = false;
