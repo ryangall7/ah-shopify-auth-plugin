@@ -30,7 +30,7 @@ export class ShopifyAuthInitializer extends Initializer {
     api.shopifyAuth = {
       ...api.shopifyAuth,
       prefix: 'shopifySession:',
-      ttl: 60 * 60 * 24, // 1 day
+      ttl: 60 * 60 * 24 * 1000, // 1 day
     };
 
     api.shopifyAuth.middleware = {
