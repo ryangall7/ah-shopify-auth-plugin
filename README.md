@@ -1,7 +1,7 @@
 Plugin to add [Shopify authentication](https://help.shopify.com/en/api/getting-started/authentication/oauth) to [Actionhero](https://www.actionherojs.com/)
 ----------------------------------------------------------------------------------
 
-Still early stages, would love any input! 
+Still early stages, would love any input!
 
 ## Configuration
 
@@ -42,7 +42,6 @@ export const DEFAULT = {
         apiKey: process.env.SHOPIFY_API_KEY,
         apiSecret: process.env.SHOPIFY_API_SECRET,
         scopes: 'read_products',
-        forwardingAddress: "https://d2935a55.ngrok.io", //using ngrok to test, normally this would be your application's URL
         ignoredDirectories: ["static"] //array of ignored directories (top level only)
     };
   }

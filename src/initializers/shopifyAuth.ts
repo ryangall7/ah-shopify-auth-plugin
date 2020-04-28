@@ -20,7 +20,7 @@ export class ShopifyAuthInitializer extends Initializer {
       return;
     }
 
-    const { ignoredDirectories, apiKey, apiSecret, scopes, forwardingAddress } = config.shopifyAuth;
+    const { ignoredDirectories, apiKey, apiSecret, scopes } = config.shopifyAuth;
 
     if(!apiKey || !apiSecret){
       log("Please add `apiKey` and `apiSecret` in .env or config to use `ah-shopify-auth-plugin`", "error")
@@ -208,22 +208,27 @@ export class ShopifyAuthInitializer extends Initializer {
       }
     }
 
-    api.shopifyAuth.topLevelRedirectScript = (origin, redirectTo) => {
+    api.shopifyAuth.topLevelRedirectScript = (origin, redirectTo, apiKey) => {
       log(`Shopify auth toplevel redirect to ${redirectTo}`);
 
       return `
-        <script type="text/javascript">
+        <script src="https://unpkg.com/@shopify/app-bridge@^1"></script> <script type="text/javascript">
           document.addEventListener('DOMContentLoaded', function() {
             if (window.top === window.self) {
               // If the current window is the 'parent', change the URL by setting location.href
               window.location.href = '${redirectTo}';
             } else {
               // If the current window is the 'child', change the parent's URL with postMessage
-              data = JSON.stringify({
-                message: 'Shopify.API.remoteRedirect',
-                data: { location: '${redirectTo}' }
+              console.log(window.location.origin);
+              var AppBridge = window['app-bridge'];
+              var createApp = AppBridge.default;
+              var Redirect = AppBridge.actions.Redirect;
+              var app = createApp({
+                apiKey: '${apiKey}',
+                shopOrigin: '${origin}',
               });
-              window.parent.postMessage(data, '${origin}');
+              var redirect = Redirect.create(app);
+              redirect.dispatch(Redirect.Action.REMOTE, '${redirectTo}');
             }
           });
         </script>

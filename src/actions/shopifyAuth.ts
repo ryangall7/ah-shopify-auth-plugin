@@ -23,7 +23,9 @@ export class Auth extends AuthenticationAction {
   }
 
   async run({ session, actionTemplate, connection, toRender }) {
-    const { apiKey, scopes, forwardingAddress } = config.shopifyAuth;
+    const { apiKey, scopes } = config.shopifyAuth;
+
+    const { host }  = connection.rawConnection.req.headers;
 
     const { hmac, shop, timestamp } = connection.params;
 
@@ -32,7 +34,7 @@ export class Auth extends AuthenticationAction {
       const cookies = api.utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();
-      const redirectUri = forwardingAddress + '/auth/inline' + connection.rawConnection.req.uri.search;
+      const redirectUri = 'https://'+ host + '/auth/inline' + connection.rawConnection.req.uri.search;
 
       log("authorizing app on `" + shop + "` with scopes `" + scopes + "`;");
       //disable automatic data rendering
@@ -41,7 +43,7 @@ export class Auth extends AuthenticationAction {
       connection.rawConnection.responseHeaders.push(['Content-Type', 'text/html'])
       connection.rawConnection.responseHttpCode = 200;
 
-      const html = api.shopifyAuth.topLevelRedirectScript(`https://${shop}`, redirectUri);
+      const html = api.shopifyAuth.topLevelRedirectScript(shop, redirectUri, apiKey);
       connection.rawConnection.res.end(html);
       connection.destroy();
     } else {
@@ -68,16 +70,18 @@ export class AuthInline extends AuthenticationAction {
   }
 
   async run({ session, actionTemplate, connection, toRender }) {
-    const { apiKey, scopes, forwardingAddress } = config.shopifyAuth;
+    const { apiKey, scopes } = config.shopifyAuth;
 
     const { hmac, shop, timestamp } = connection.params;
+
+    const { host }  = connection.rawConnection.req.headers;
 
     if (shop) {
 
       const cookies = api.utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();
-      const redirectUri = forwardingAddress + '/auth/callback';
+      const redirectUri = "https://" + host + '/auth/callback';
       const installUrl = 'https://' + shop +
         '/admin/oauth/authorize?client_id=' + apiKey +
         '&scope=' + scopes +
