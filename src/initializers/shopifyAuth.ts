@@ -42,9 +42,9 @@ export class ShopifyAuthInitializer extends Initializer {
 
           //check for ignored directories
           var skip = false;
-          let {path} = connection.rawConnection.req.uri;
-          ignoredDirectories.map(( dirrectory ) => {
-            if(path.indexOf(dirrectory) == 1){
+          let {pathname} = connection.rawConnection.parsedURL;
+          ignoredDirectories.map(( directory ) => {
+            if(pathname.indexOf(directory) == 1){
               skip = true;
             }
           });
