@@ -34,7 +34,7 @@ export class Auth extends AuthenticationAction {
       const cookies = utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();
-      const redirectUri = 'https://'+ host + '/auth/inline' + connection.rawConnection.req.uri.search;
+      const redirectUri = 'https://'+ host + '/auth/inline' + connection.rawConnection.parsedURL.search;
 
       log("authorizing app on `" + shop + "` with scopes `" + scopes + "`;");
       //disable automatic data rendering
