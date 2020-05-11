@@ -31,8 +31,6 @@ export class Auth extends AuthenticationAction {
 
     if (shop) {
 
-      console.log(utils);
-
       const cookies = utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();

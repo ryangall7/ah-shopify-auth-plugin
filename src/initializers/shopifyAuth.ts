@@ -52,6 +52,8 @@ export class ShopifyAuthInitializer extends Initializer {
 
           if(actionTemplate.skipAuthentication) return;
 
+          console.log(actionTemplate);
+
           const { hmac, shop, timestamp } = params;
           //check for session
           if(session.shopifySession){
@@ -91,6 +93,8 @@ export class ShopifyAuthInitializer extends Initializer {
 
           if (shop) {
             const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
+            console.log(hmac, shop, timestamp);
+            console.log(installUrl);
             connection.rawConnection.responseHeaders.push(['Location', installUrl]);
             connection.rawConnection.responseHttpCode = 302;
             throw Error('Authentication Failed.');
