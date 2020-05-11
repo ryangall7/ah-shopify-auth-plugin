@@ -11,9 +11,8 @@
   },
   "scripts": {
     "postinstall": "npm run build",
-    "dev": "ts-node-dev --transpile-only ./node_modules/.bin/actionhero start",
-    "start": "actionhero start",
-    "actionhero": "actionhero",
+    "dev": "ts-node-dev --no-deps --transpile-only ./src/server.ts",
+    "start": "node ./dist/server.js",
     "test": "jest",
     "pretest": "npm run build && npm run lint",
     "build": "tsc --declaration",
@@ -24,7 +23,7 @@
   "author": "Ryan Gallagher",
   "license": "ISC",
   "dependencies": {
-    "cookie": "^0.4.0",
+    "cookie": "^0.4.1",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
@@ -32,18 +31,18 @@
     "querystring": "^0.2.0"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.29",
-    "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.14",
+    "@types/bluebird": "^3.5.30",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.38",
     "@types/validator": "^12.0.1",
     "actionhero": "^21.0.0",
     "jest": "^24.9.0",
-    "pg": "^7.14.0",
+    "pg": "^7.18.2",
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.13",
-    "ts-jest": "^24.2.0",
+    "ts-jest": "^24.3.0",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.7.2"
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": ">=8.0.0"

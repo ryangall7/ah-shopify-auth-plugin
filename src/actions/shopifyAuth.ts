@@ -1,4 +1,4 @@
-import { Initializer, Action, api, route, config, log, cache } from "actionhero";
+import { Initializer, Action, api, utils, route, config, log, cache } from "actionhero";
 import * as nonce from "nonce";
 
 abstract class AuthenticationAction extends Action {
@@ -31,7 +31,9 @@ export class Auth extends AuthenticationAction {
 
     if (shop) {
 
-      const cookies = api.utils.parseCookies(connection.rawConnection.req)
+      console.log(utils);
+
+      const cookies = utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();
       const redirectUri = 'https://'+ host + '/auth/inline' + connection.rawConnection.req.uri.search;
@@ -78,7 +80,7 @@ export class AuthInline extends AuthenticationAction {
 
     if (shop) {
 
-      const cookies = api.utils.parseCookies(connection.rawConnection.req)
+      const cookies = utils.parseCookies(connection.rawConnection.req)
 
       const state = nonce()();
       const redirectUri = "https://" + host + '/auth/callback';

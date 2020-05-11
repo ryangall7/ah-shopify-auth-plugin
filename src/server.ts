@@ -1,0 +1,18 @@
+// in ./src/server.ts
+import { Process } from "actionhero";
+import { join, basename } from "path";
+
+// load any custom code, configure the env, as needed
+async function main() {
+  // create a new actionhero process
+  const app = new Process();
+
+  // handle unix signals and uncaught exceptions & rejections
+  app.registerProcessSignals();
+
+  // start the app!
+  // you can pass custom configuration to the process as needed
+  await app.start();
+}
+
+main();

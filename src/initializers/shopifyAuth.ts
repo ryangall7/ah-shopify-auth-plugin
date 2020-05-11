@@ -57,6 +57,7 @@ export class ShopifyAuthInitializer extends Initializer {
           if(session.shopifySession){
             if(shop && shop != session.shopifySession.shop){
               const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
+              console.log(installUrl);
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
               throw Error('Authentication Failed.');
