@@ -52,8 +52,6 @@ export class ShopifyAuthInitializer extends Initializer {
 
           if(actionTemplate.skipAuthentication) return;
 
-          console.log(actionTemplate);
-
           const { hmac, shop, timestamp } = params;
           //check for session
           if(session.shopifySession){
