@@ -23,14 +23,12 @@ export class Auth extends AuthenticationAction {
   }
 
   async run(data) {
-    
+
     const { apiKey, scopes } = config.shopifyAuth;
 
     const { host }  = data.connection.rawConnection.req.headers;
 
     const { hmac, shop, timestamp } = data.connection.params;
-
-    console.log("auth", data.connection.params);
 
     if (shop) {
 
@@ -126,8 +124,6 @@ export class AuthCallback extends AuthenticationAction {
     const { connection, response } = data
     const { state, hmac, code, shop } = connection.params
     const stateCookie = connection.rawConnection.cookies.state;
-
-    console.log("auth?", data);
 
     if (state !== stateCookie) {
       connection.rawConnection.responseHttpCode = 400;

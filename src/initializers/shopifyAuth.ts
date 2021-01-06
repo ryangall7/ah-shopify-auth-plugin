@@ -50,11 +50,7 @@ export class ShopifyAuthInitializer extends Initializer {
           });
           if(skip) return;
 
-          console.log("middleware 1");
-
           if(actionTemplate.skipAuthentication) return;
-
-          console.log("middleware 1.5");
 
           const { hmac, shop, timestamp } = params;
           //check for session
@@ -67,12 +63,9 @@ export class ShopifyAuthInitializer extends Initializer {
               connection.rawConnection.responseHttpCode = 302;
               throw Error('Authentication Failed.');
             }else{
-              console.log("hereish 2");
               return;
             }
           }
-
-          console.log("middleware 2");
 
           //check webhook
           const {
@@ -82,9 +75,7 @@ export class ShopifyAuthInitializer extends Initializer {
             'x-shopify-test': xShopifyTest,
             'x-shopify-topic': xShopifyTopic
           } = connection.rawConnection.req.headers;
-
-          console.log("middleware 3");
-
+          
           if(xShopifyTopic){
             const { body, rawBody } = connection.rawConnection.params;
             const verified = await api.shopifyAuth.verifyWebhookHmac(xShopifyHmacSha256, rawBody.toString('utf-8'));
