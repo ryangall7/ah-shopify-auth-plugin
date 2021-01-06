@@ -22,32 +22,35 @@ export class Auth extends AuthenticationAction {
     }
   }
 
-  async run({ session, actionTemplate, connection, toRender }) {
+  async run(data) {
+    
     const { apiKey, scopes } = config.shopifyAuth;
 
-    const { host }  = connection.rawConnection.req.headers;
+    const { host }  = data.connection.rawConnection.req.headers;
 
-    const { hmac, shop, timestamp } = connection.params;
+    const { hmac, shop, timestamp } = data.connection.params;
+
+    console.log("auth", data.connection.params);
 
     if (shop) {
 
-      const cookies = utils.parseCookies(connection.rawConnection.req)
+      const cookies = utils.parseCookies(data.connection.rawConnection.req)
 
       const state = nonce()();
-      const redirectUri = 'https://'+ host + '/auth/inline' + connection.rawConnection.parsedURL.search;
+      const redirectUri = 'https://'+ host + '/auth/inline' + data.connection.rawConnection.parsedURL.search;
 
       log("authorizing app on `" + shop + "` with scopes `" + scopes + "`;");
       //disable automatic data rendering
-      toRender = false;
-      //  connection.rawConnection.responseHeaders.push(['Location', installUrl]);
-      connection.rawConnection.responseHeaders.push(['Content-Type', 'text/html'])
-      connection.rawConnection.responseHttpCode = 200;
+      data.toRender = false;
+      //  data.connection.rawConnection.responseHeaders.push(['Location', installUrl]);
+      data.connection.rawConnection.responseHeaders.push(['Content-Type', 'text/html'])
+      data.connection.rawConnection.responseHttpCode = 200;
 
       const html = api.shopifyAuth.topLevelRedirectScript(shop, redirectUri, apiKey);
-      connection.rawConnection.res.end(html);
-      connection.destroy();
+      data.connection.rawConnection.res.end(html);
+      data.connection.destroy();
     } else {
-      connection.rawConnection.responseHttpCode = 400;
+      data.connection.rawConnection.responseHttpCode = 400;
     }
   }
 }
@@ -124,6 +127,8 @@ export class AuthCallback extends AuthenticationAction {
     const { state, hmac, code, shop } = connection.params
     const stateCookie = connection.rawConnection.cookies.state;
 
+    console.log("auth?", data);
+
     if (state !== stateCookie) {
       connection.rawConnection.responseHttpCode = 400;
       response.error = 'Request origin cannot be verified';
@@ -172,6 +177,9 @@ export class AuthCheck extends Action {
   }
 
   async run({ session, response }) {
+
+    console.log("check");
+
     response.randomNumber = Math.random();
   }
 }

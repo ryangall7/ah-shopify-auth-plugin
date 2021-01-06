@@ -28,7 +28,8 @@
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
     "nonce": "^1.0.4",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "actionhero": "^22.1.1"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.30",

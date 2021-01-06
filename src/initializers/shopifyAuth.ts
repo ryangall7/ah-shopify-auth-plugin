@@ -50,21 +50,29 @@ export class ShopifyAuthInitializer extends Initializer {
           });
           if(skip) return;
 
+          console.log("middleware 1");
+
           if(actionTemplate.skipAuthentication) return;
+
+          console.log("middleware 1.5");
 
           const { hmac, shop, timestamp } = params;
           //check for session
           if(session.shopifySession){
             if(shop && shop != session.shopifySession.shop){
+              console.log("hereish 1");
               const installUrl = "/auth?hmac=" + hmac + "&shop=" + shop + "&timestamp=" + timestamp;
               console.log(installUrl);
               connection.rawConnection.responseHeaders.push(['Location', installUrl]);
               connection.rawConnection.responseHttpCode = 302;
               throw Error('Authentication Failed.');
             }else{
+              console.log("hereish 2");
               return;
             }
           }
+
+          console.log("middleware 2");
 
           //check webhook
           const {
@@ -74,6 +82,8 @@ export class ShopifyAuthInitializer extends Initializer {
             'x-shopify-test': xShopifyTest,
             'x-shopify-topic': xShopifyTopic
           } = connection.rawConnection.req.headers;
+
+          console.log("middleware 3");
 
           if(xShopifyTopic){
             const { body, rawBody } = connection.rawConnection.params;
