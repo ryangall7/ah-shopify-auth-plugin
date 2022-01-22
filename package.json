@@ -26,7 +26,7 @@
     "cookie": "^0.4.1",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "nonce": "^1.0.4",
     "querystring": "^0.2.0",
     "actionhero": "^22.1.1"
